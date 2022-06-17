@@ -1,3 +1,4 @@
+// multi agent
 pipeline {
   agent none
   stages {
@@ -6,7 +7,15 @@ pipeline {
         docker { image 'maven:3.8.1-adoptopenjdk-11' }
       }
       steps {
-        sh 'mvn --version'
+        sh '''
+        mvn --version
+        pwd
+        touch foo.txt
+        echo bar > foo.txt
+        '''
+        script{
+          env.agentName="agent_1"
+        }
       }
     }
     stage('Front-end') {
@@ -14,7 +23,12 @@ pipeline {
         docker { image 'node:16-alpine' }
       }
       steps {
-        sh 'node --version'
+        sh '''
+        node --version
+        pwd
+        cat foo.txt
+        echo $agentName
+        '''
       }
     }
   }
