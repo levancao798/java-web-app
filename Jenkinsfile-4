@@ -1,7 +1,27 @@
 // multi agent
+library identifier: 'jenkins-share-library@master', retriever: modernSCM(
+  github(traits: [gitHubBranchDiscovery(1), 
+  gitHubPullRequestDiscovery(1), 
+  gitHubForkDiscovery(strategyId: 1, trust: gitHubTrustPermissions())], 
+  credentialsId: 'github-caolv', 
+  repository: 'jenkins-share-library', 
+  repoOwner: 'return200-ok'))
+
 pipeline {
   agent none
   stages {
+    stage('Checkout') {
+      agent {
+        node {
+          label 'master'
+        }
+      }
+      steps {
+        script{
+          checkOutFrom(branches:"master", repo_url:"https://github.com/return200-ok/maven-web-app.git")
+        }
+      }
+    }
     stage('Back-end') {
       agent {
         docker { image 'maven:3.8.1-adoptopenjdk-11' }
