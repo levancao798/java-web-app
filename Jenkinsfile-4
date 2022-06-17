@@ -18,7 +18,8 @@ pipeline {
       }
       steps {
         script{
-          checkOutFrom(branches:"master", repo_url:"https://github.com/return200-ok/maven-web-app.git")
+          // checkOutFrom(branches:"master", repo_url:"https://github.com/return200-ok/maven-web-app.git")
+          checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/return200-ok/maven-web-app.git']]])
         }
       }
     }
